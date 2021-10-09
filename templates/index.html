@@ -1,14 +1,29 @@
 <html>
     <head>
-
+        <script type="text/javascript" src="{{ url_for('static', filename='socket.io.js') }}"></script>
+        <script type="text/javascript" charset="utf-8">
+            var socket = io();
+            socket.on('message', function(msg) {
+                if (msg == 'msg:update') {
+                    var warn = document.getElementById("warning");
+                    warn.style.display = "block";
+                }
+                
+            });
+            function sendUpdate() {
+                var num = document.getElementById("theNum").value;
+                socket.send('msg:update');
+                document.getElementById("sendnum").submit();
+            }
+        </script>
     </head>
     <body>
-        <a href="/">Update Page</a>
+        <a id="warning" style="display: none;" href="/">Update Page</a>
         <h1>Number List</h1>
-        <form action="/" method="POST">
+        <form id="sendnum" action="/" method="POST">
             <label for="theNum">Number Number:</label>
             <input type="text" id="theNum" name="theNum">
-            <input type="submit" value="Update">
+            <input type="button" onclick="sendUpdate()" value="Update">
         </form>
         <ul>
         {% for row in rows %}

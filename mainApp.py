@@ -1,7 +1,14 @@
 from flask import Flask, render_template, request
 import sqlite3 as sql, os
+from flask_socketio import SocketIO, send
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'kabwV6RD'
+socketio = SocketIO(app, cors_allowed_origins='*')
+
+@socketio.on('message')
+def handleMessage(msg):
+    send(msg, broadcast=True)
 
 @app.route('/', methods=['POST','GET'])
 def index():
@@ -29,7 +36,6 @@ def index():
                 cur = con.cursor()
                 cur.execute("SELECT * from nums")
                 rows = cur.fetchall()
-                print(rows)
         except:
             print('DB read error')
             con.rollback()
@@ -40,4 +46,4 @@ def index():
 if __name__ == "__main__":
     #Make current dir working directory
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
-    app.run(host='0.0.0.0', debug='True')
+    socketio.run(app, host='0.0.0.0', debug='True')
