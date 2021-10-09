@@ -1,0 +1,18 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <a href="/">Update Page</a>
+        <h1>Number List</h1>
+        <form action="/" method="POST">
+            <label for="theNum">Number Number:</label>
+            <input type="text" id="theNum" name="theNum">
+            <input type="submit" value="Update">
+        </form>
+        <ul>
+        {% for row in rows %}
+            <li>{{row[1]}}</li>
+        {% endfor %}
+    </body>
+</html>
